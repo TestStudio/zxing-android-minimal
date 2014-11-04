@@ -59,6 +59,7 @@ final class CameraConfigurationManager {
   }
 
   void setDesiredCameraParameters(Camera camera, boolean safeMode) {
+      camera.setDisplayOrientation(90);
     Camera.Parameters parameters = camera.getParameters();
 
     if (parameters == null) {
@@ -101,6 +102,7 @@ final class CameraConfigurationManager {
 
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
     camera.setParameters(parameters);
+
 
     Camera.Parameters afterParameters = camera.getParameters();
     Camera.Size afterSize = afterParameters.getPreviewSize();

@@ -144,7 +144,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       cancelButton.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View view) {
-                  setResult(RESULT_CANCELED);
+                  Intent result = new Intent();
+                  result.putExtra("CANCEL_FOR_MANUAL_ENTRY", true);
+                  setResult(RESULT_CANCELED, result);
                   finish();
               }
           });

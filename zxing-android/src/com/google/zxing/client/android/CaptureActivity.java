@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -63,7 +64,7 @@ import java.util.Map;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
+public final class CaptureActivity extends ActionBarActivity implements SurfaceHolder.Callback {
 
   private static final String TAG = CaptureActivity.class.getSimpleName();
 
@@ -126,6 +127,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
     setContentView (zxingCaptureLayoutResourceId);
 
+
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     hasSurface = false;
     inactivityTimer = new InactivityTimer(this);
     beepManager = new BeepManager(this);
@@ -140,7 +144,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       cancelButton.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View view) {
-                  setResult(RESULT_CANCELED);
+                  Intent result = new Intent();
+                  result.putExtra("CANCEL_FOR_MANUAL_ENTRY", true);
+                  setResult(RESULT_CANCELED, result);
                   finish();
               }
           });
@@ -169,11 +175,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-    if (prefs.getBoolean(PreferencesActivity.KEY_DISABLE_AUTO_ORIENTATION, true)) {
-      setRequestedOrientation(getCurrentOrientation());
-    } else {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-    }
+//    if (prefs.getBoolean(PreferencesActivity.KEY_DISABLE_AUTO_ORIENTATION, true)) {
+//      setRequestedOrientation(getCurrentOrientation());
+//    } else {
+//      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+//    }
 
     resetStatusView();
 
@@ -349,7 +355,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     if(itemId == R.id.zxing_menu_help) {
       intent.setClassName(this, HelpActivity.class.getName());
       startActivity(intent);
-    } else {
+    } else if (itemId == android.R.id.home) {
+        this.setResult(RESULT_CANCELED);
+        this.finish();
+        return true;
+    }
+    else {
       return super.onOptionsItemSelected(item);
     }
     return true;
