@@ -42,19 +42,24 @@ public final class GingerbreadOpenCameraInterface implements OpenCameraInterface
     }
 
     int index = 0;
+    int cameraIndex = 0;
     while (index < numCameras) {
       Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
       Camera.getCameraInfo(index, cameraInfo);
       if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+          cameraIndex = index;
         break;
+      }
+      if (cameraIndex == 0 && cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+          cameraIndex = index;
       }
       index++;
     }
     
     Camera camera;
-    if (index < numCameras) {
-      Log.i(TAG, "Opening camera #" + index);
-      camera = Camera.open(index);
+    if (cameraIndex < numCameras) {
+      Log.i(TAG, "Opening camera #" + cameraIndex);
+      camera = Camera.open(cameraIndex);
     } else {
       Log.i(TAG, "No camera facing back; returning camera #0");
       camera = Camera.open(0);

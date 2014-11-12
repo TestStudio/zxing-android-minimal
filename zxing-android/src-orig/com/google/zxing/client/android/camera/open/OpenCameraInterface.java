@@ -46,16 +46,21 @@ public final class OpenCameraInterface {
     if (!explicitRequest) {
       // Select a camera if no explicit camera requested
       int index = 0;
+      int cameraIndex = 0;
       while (index < numCameras) {
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         Camera.getCameraInfo(index, cameraInfo);
         if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+            cameraIndex = index;
           break;
+        }
+        if (cameraIndex == 0 && cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            cameraIndex = index;
         }
         index++;
       }
-      
-      cameraId = index;
+
+      cameraId = cameraIndex;
     }
 	  
     Camera camera;
