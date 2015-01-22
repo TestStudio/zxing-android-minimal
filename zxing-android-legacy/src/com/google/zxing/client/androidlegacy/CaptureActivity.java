@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.androidlegacy;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -28,6 +29,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -62,7 +65,7 @@ import java.util.Set;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
+public final class CaptureActivity extends ActionBarActivity implements SurfaceHolder.Callback {
 
   private static final String TAG = CaptureActivity.class.getSimpleName();
 
@@ -127,6 +130,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         zxingCaptureLayoutResourceId = extras.getInt(ZXING_CAPTURE_LAYOUT_ID_KEY, R.layout.zxinglegacy_capture);
     }
     setContentView (zxingCaptureLayoutResourceId);
+
+      // Android appcompatv7:21 needs a toolbar instead of an actionbar
+      Toolbar actionBar = (Toolbar) this.findViewById(R.id.actionBar);
+      setSupportActionBar(actionBar);
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     hasSurface = false;
     inactivityTimer = new InactivityTimer(this);
@@ -318,8 +326,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater menuInflater = getMenuInflater();
-    menuInflater.inflate(R.menu.zxinglegacy_capture, menu);
+//    MenuInflater menuInflater = getMenuInflater();
+//    menuInflater.inflate(R.menu.zxinglegacy_capture, menu);
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -331,6 +339,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     if(itemId == R.id.menu_help) {
       intent.setClassName(this, HelpActivity.class.getName());
       startActivity(intent);
+    } else if (itemId == android.R.id.home) {
+        this.setResult(RESULT_CANCELED);
+        this.finish();
+        return true;
     } else {
       return super.onOptionsItemSelected(item);
     }

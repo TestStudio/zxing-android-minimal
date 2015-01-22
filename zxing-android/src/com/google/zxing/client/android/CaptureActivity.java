@@ -30,6 +30,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -127,7 +128,9 @@ public final class CaptureActivity extends ActionBarActivity implements SurfaceH
     }
     setContentView (zxingCaptureLayoutResourceId);
 
-
+    // Android appcompatv7:21 needs a toolbar instead of an actionbar
+    Toolbar actionBar = (Toolbar) this.findViewById(R.id.actionBar);
+    setSupportActionBar(actionBar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     hasSurface = false;
@@ -342,8 +345,8 @@ public final class CaptureActivity extends ActionBarActivity implements SurfaceH
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater menuInflater = getMenuInflater();
-    menuInflater.inflate(R.menu.zxing_capture, menu);
+//    MenuInflater menuInflater = getMenuInflater();
+//    menuInflater.inflate(R.menu.zxing_capture, menu);
     return super.onCreateOptionsMenu(menu);
   }
 

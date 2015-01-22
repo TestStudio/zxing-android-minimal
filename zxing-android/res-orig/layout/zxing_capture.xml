@@ -26,6 +26,15 @@
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"/>
 
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/actionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetEnd="0dp"
+        app:contentInsetStart="0dp">
+    </android.support.v7.widget.Toolbar>
+
   <LinearLayout android:id="@+id/zxing_result_view"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
